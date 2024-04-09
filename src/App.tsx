@@ -26,6 +26,14 @@ function App() {
           <li>
             <NavLink to={"/register"}>Register</NavLink>
           </li>
+          <li>
+            <NavLink to={"/orders"}>Orders</NavLink>
+          </li>
+          {user && (
+            <li>
+              <NavLink to={"/profile"}>Profile</NavLink>
+            </li>
+          )}
           {user && <li>{email}</li>}
           {user ? (
             <button onClick={hanldeSignOut}>SignOut</button>

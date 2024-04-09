@@ -1,11 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthProvider";
+import { FcGoogle } from "react-icons/fc";
 
 const Login: React.FC = () => {
-  const { singInUser } = useAuth();
-
+  const { singInUser, user, signInWithGoogle } = useAuth();
+  const navigate = useNavigate();
   const handleForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const email = e.currentTarget.email.value;
@@ -13,6 +13,20 @@ const Login: React.FC = () => {
     singInUser(email, password)
       .then((result) => {
         console.log(result.user);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    (e.target as HTMLFormElement).reset();
+  };
+
+  const handleGoogleSignIn = () => {
+    signInWithGoogle()
+      .then((result) => {
+        console.log(result.user);
+        navigate("/");
       })
       .catch((error) => {
         console.error(error);
@@ -29,6 +43,18 @@ const Login: React.FC = () => {
             excepturi exercitationem quasi. In deleniti eaque aut repudiandae et
             a id nisi.
           </p>
+          {user ? (
+            <p>Hello {user.displayName}</p>
+          ) : (
+            <p className="font-bold">Please login to see your orders</p>
+          )}
+
+          <button
+            className="btn btn-outline btn-info btn-lg mt-8"
+            onClick={handleGoogleSignIn}
+          >
+            <FcGoogle />
+          </button>
         </div>
         <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
           <form className="card-body" onSubmit={handleForm}>

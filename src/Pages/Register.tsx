@@ -1,21 +1,38 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthProvider";
+import { updateProfile } from "firebase/auth";
 
 const Register: React.FC = () => {
-  const { createUser } = useAuth();
+  const { createUser, loading } = useAuth();
+  const navigate = useNavigate();
+
+  if (loading) {
+    return <span className="loading loading-spinner loading-lg"></span>;
+  }
 
   const handleForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const email = e.currentTarget.email.value;
     const password = e.currentTarget.password.value;
+    const userName = e.currentTarget.userName.value;
     createUser(email, password)
       .then((result) => {
-        console.log(result.user);
+        updateProfile(result.user, {
+          displayName: userName,
+        })
+          .then(() => {
+            console.log("Register Successfully Done");
+            navigate("/");
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       })
       .catch((error) => {
         console.error(error);
       });
+    (e.target as HTMLFormElement).reset();
   };
 
   return (
@@ -40,7 +57,7 @@ const Register: React.FC = () => {
                 placeholder="Your Name"
                 className="input input-bordered"
                 required
-                name="name"
+                name="userName"
               />
             </div>
             <div className="form-control">

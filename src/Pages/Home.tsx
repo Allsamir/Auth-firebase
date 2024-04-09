@@ -6,7 +6,7 @@ const Home: React.FC = () => {
   console.log(user?.email);
   return (
     <div>
-      <h1>Home</h1>
+      <h1 className="text-4xl">{user?.displayName} your Home</h1>
     </div>
   );
 };
