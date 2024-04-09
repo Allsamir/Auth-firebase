@@ -2,12 +2,11 @@ import React from "react";
 import { useAuth } from "../AuthProvider";
 
 const Home: React.FC = () => {
-  const { value, handleValue } = useAuth();
-  console.log(value);
+  const { user } = useAuth();
+  console.log(user?.email);
   return (
     <div>
-      <h1>{value}</h1>
-      <button onClick={handleValue}>Change The Value</button>
+      <h1>Home</h1>
     </div>
   );
 };

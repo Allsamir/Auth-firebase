@@ -1,7 +1,24 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import { useAuth } from "../AuthProvider";
+
 const Login: React.FC = () => {
+  const { singInUser } = useAuth();
+
+  const handleForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const email = e.currentTarget.email.value;
+    const password = e.currentTarget.password.value;
+    singInUser(email, password)
+      .then((result) => {
+        console.log(result.user);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   return (
     <div className="hero min-h-screen bg-base-200">
       <div className="hero-content flex-col lg:flex-row-reverse">
@@ -14,7 +31,7 @@ const Login: React.FC = () => {
           </p>
         </div>
         <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-          <form className="card-body">
+          <form className="card-body" onSubmit={handleForm}>
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Email</span>
@@ -24,6 +41,7 @@ const Login: React.FC = () => {
                 placeholder="email"
                 className="input input-bordered"
                 required
+                name="email"
               />
             </div>
             <div className="form-control">
@@ -35,6 +53,7 @@ const Login: React.FC = () => {
                 placeholder="password"
                 className="input input-bordered"
                 required
+                name="password"
               />
               <label className="label">
                 <a href="#" className="label-text-alt link link-hover">
